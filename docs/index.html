@@ -28,16 +28,28 @@
     </main>
 
     <script>
+        const quoteText = document.getElementById('quote-text');
+        const quoteAuthor = document.getElementById('quote-author');
+        const quoteContainer = document.getElementById('quote-container');
+
+        function setQuote(text, author) {
+            quoteText.classList.add('crossfade-out');
+            quoteAuthor.classList.add('crossfade-out');
+            setTimeout(() => {
+                quoteText.textContent = `"${text}"`;
+                quoteAuthor.textContent = `- ${author}`;
+                quoteText.classList.remove('crossfade-out');
+                quoteAuthor.classList.remove('crossfade-out');
+                quoteContainer.classList.add('loaded');
+            }, 200);
+        }
+
         fetch('https://thequoteshub.com/api/random-quote?format=json')
             .then(response => response.json())
-            .then(data => {
-                document.getElementById('quote-text').textContent = `"${data.text}"`;
-                document.getElementById('quote-author').textContent = `- ${data.author}`;
-            })
+            .then(data => setQuote(data.text, data.author))
             .catch(error => {
                 console.error('Error fetching quote:', error);
-                document.getElementById('quote-text').textContent = "Simplicity is the ultimate sophistication.";
-                document.getElementById('quote-author').textContent = "- Leonardo da Vinci";
+                setQuote('Simplicity is the ultimate sophistication.', 'Leonardo da Vinci');
             });
     </script>
 </body>
